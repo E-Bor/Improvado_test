@@ -1,6 +1,7 @@
 import json
 import requests
 from requests.models import Response
+from .errors import ExceptionVKAPIRequest
 
 
 class VkApiRequests:
@@ -32,9 +33,16 @@ class VkApiRequests:
     # A function that makes a request to get a list of friends and information about them
     def get_friends_info(self, user_id: int, count: int = 5000, offset: int = 0) -> json:
         api_method = "friends.get?"
+        count = count if count else 5000
+        offset = offset if offset else 0
         fields = [f"user_id={str(user_id)}", "fields=country,city,bdate,sex", f"count={count}", f"offset={offset}"]
+
         response = self.__get_request(
             api_method=api_method,
             fields=fields)
+
+        if response.json().get("error"):
+            raise ExceptionVKAPIRequest(response.json().get("error").get("error_code"))
+
         return response.json()
-        # сделать обработчик ошибок платформы вк
+

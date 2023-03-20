@@ -7,11 +7,11 @@ import json
 class DataWriter:
     """Data export class in different formats"""
     def __init__(self):
-        self.path_separator = "\\" if platform.system() == "Windows" else "/"    #
+        self.path_separator = "\\" if platform.system() == "Windows" else "/"
         self.path = self.path_separator.join(os.path.dirname(__file__).split(self.path_separator)[:-2])
 
     # Checking if there are files with the same extension
-    def __check_duplicate_files(self, path, extension):
+    def __check_duplicate_files(self, path: str, extension: str) -> str:
         old_path = path
         counter = 0
 
@@ -27,14 +27,14 @@ class DataWriter:
             return old_path
 
     # Writing data to a file
-    def __write_file(self, data, path, delimiter: str = ''):
+    def __write_file(self, data: list, path: str, delimiter: str = ''):
         with open(path, "w") as file:
             datawriter = csv.writer(file, delimiter=delimiter)
             for i in data:
                 datawriter.writerow(i)
 
     # Saving data to csv
-    def save_csv(self, data: list[list], path: str = None):
+    def __save_csv(self, data: list[list], path: str = None):
         if path:
             path = self.__check_duplicate_files(path, ".csv")
         else:
@@ -42,7 +42,7 @@ class DataWriter:
         self.__write_file(data, path, delimiter=",")
 
     # Saving data to tsv
-    def save_tsv(self, data: list[list], path: str = None):
+    def __save_tsv(self, data: list[list], path: str = None):
         if path:
             path = self.__check_duplicate_files(path, ".tsv")
         else:
@@ -50,7 +50,7 @@ class DataWriter:
         self.__write_file(data, path, delimiter='\t')
 
     # Saving data to JSON
-    def save_json(self, data: list[list], path: str = None):
+    def __save_json(self, data: list[list], path: str = None):
         j = json.dumps(data, indent=4, ensure_ascii=False,)
         if path:
             path = self.__check_duplicate_files(path, ".json")
@@ -64,10 +64,10 @@ class DataWriter:
         extension = path.split(self.path_separator)[-1].split(".")[-1] if "." in path else extension
         if extension:
             if extension.lower() == "tsv":
-                self.save_tsv(data, path)
+                self.__save_tsv(data, path)
             if extension.lower() == "json":
-                self.save_json(data, path)
+                self.__save_json(data, path)
             if extension.lower() == "csv":
-                self.save_csv(data, path)
+                self.__save_csv(data, path)
         else:
-            self.save_csv(data, path)
+            self.__save_csv(data, path)
