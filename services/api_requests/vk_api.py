@@ -1,6 +1,5 @@
 import json
 import requests
-from config import token, base_url, test_user_id, api_version
 from requests.models import Response
 
 class VkApiRequests:
@@ -35,10 +34,5 @@ class VkApiRequests:
         response = self.__get_request(
             api_method=api_method,
             fields=fields)
-        print(response.json())
+        return response.json()
         # сделать обработчик ошибок платформы вк
-
-
-
-test = VkApiRequests(token, base_url, api_version)
-print(test.get_friends_info(test_user_id))
