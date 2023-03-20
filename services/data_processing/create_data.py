@@ -7,7 +7,7 @@ class DataHandler:
         date.reverse()
         return "-".join(date)
 
-    def __dict_creator(self, data_list) -> list:
+    def __list_creator(self, data_list) -> list:
         for i in data_list:
             name = i.get("first_name")
             last_name = i.get("last_name")
@@ -21,7 +21,7 @@ class DataHandler:
     def get_prepared_friends_list(self, data_list: dict) -> list[list]:
         preparation_data = data_list.get("response").get('items')
         friends_data_list = []
-        for i in self.__dict_creator(preparation_data):
+        for i in self.__list_creator(preparation_data):
             friends_data_list.append(i)
         return sorted(friends_data_list, key=lambda x: x[0])
 
